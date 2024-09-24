@@ -1,0 +1,136 @@
+<script src="https://cdn.staticfile.net/jquery/2.2.4/jquery.min.js"></script>
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>幸运抽奖者注册</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 50px;
+            text-align: center;
+        }
+        .form-container {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            margin-top: 20px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        #dataList {
+            margin-top: 20px;
+            text-align: left;
+            display: none; /* 初始隐藏 */
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>幸运抽奖者注册</h2>
+    <div class="form-container">
+        <h3>注册信息</h3>
+        <form id="registrationForm">
+            <label for="fullname">全名 FULL NAME</label>
+            <input type="text" id="fullname" name="fullname" required>
+
+            <label for="icnumber">身份证号码 I/C NUMBER</label>
+            <input type="text" id="icnumber" name="icnumber" required>
+
+            <label for="phonenumber">手机号码 PHONE NUMBER</label>
+            <input type="text" id="phonenumber" name="phonenumber" required>
+
+            <button type="submit">注册</button>
+        </form>
+    </div>
+
+    <div class="form-container">
+        <h3>查看注册信息</h3>
+        <input type="text" id="adminPassword" placeholder="输入密码">
+        <button id="showData">查看数据</button>
+    </div>
+
+    <div id="dataList"></div> <!-- 用于显示注册的参与者信息 -->
+
+    <script>
+        const participants = []; // 存储注册用户数据的数组
+        
+        document.getElementById('registrationForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // 防止默认提交
+        
+            // 获取表单数据
+            const fullname = document.getElementById('fullname').value;
+            const icnumber = document.getElementById('icnumber').value;
+            const phonenumber = document.getElementById('phonenumber').value;
+        
+            // 检查是否重复注册
+            const isDuplicate = participants.some(participant => 
+                participant.fullname === fullname || 
+                participant.icnumber === icnumber || 
+                participant.phonenumber === phonenumber
+            );
+        
+            if (isDuplicate) {
+                alert('该用户已注册，请检查输入信息。');
+                return; // 终止注册流程
+            }
+        
+            // 创建用户数据对象
+            const userData = { fullname, icnumber, phonenumber };
+        
+            // 将用户数据存储到数组中
+            participants.push(userData);
+        
+            // 清空表单
+            this.reset();
+            alert('注册成功！');
+        });
+        
+        document.getElementById('showData').addEventListener('click', function() {
+            const password = document.getElementById('adminPassword').value;
+            if (password === 'riwayjbjb') { // 设置密码
+                updateDataList(); // 更新显示
+                document.getElementById('dataList').style.display = 'block'; // 显示数据
+            } else {
+                alert('密码错误！');
+            }
+        });
+        
+        function updateDataList() {
+            const dataListDiv = document.getElementById('dataList');
+            dataListDiv.innerHTML = ''; // 清空之前的数据
+        
+            // 显示当前参与者的数据
+            participants.forEach((p, index) => {
+                const participantInfo = document.createElement('p');
+                participantInfo.innerText = `编号: ${index + 1}, 全名: ${p.fullname}, 身份证: ${p.icnumber}, 手机: ${p.phonenumber}`;
+                dataListDiv.appendChild(participantInfo);
+            });
+        }
+    </script>
+
+</body>
+
+</html>
